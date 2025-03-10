@@ -1,5 +1,6 @@
 #!/bin/bash
-# Conzex VPS (Proxmox VE) Setup Script
+# Proxmox VE Installation Script for Debian 12
+# This script installs Proxmox VE and configures necessary dependencies
 
 set -e  # Exit on error
 
@@ -7,32 +8,31 @@ set -e  # Exit on error
 echo "Updating system packages..."
 apt update && apt upgrade -y
 
-### Step 2: Install Proxmox VE ###
-echo "Installing Proxmox VE..."
-echo "deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription" > /etc/apt/sources.list.d/pve-install-repo.list
-apt update && apt full-upgrade -y
-apt install -y proxmox-ve postfix open-iscsi
+### Step 2: Install Required Dependencies ###
+echo "Installing required dependencies..."
+apt install -y curl wget git sudo software-properties-common
 
-### Step 3: Enable Required Services ###
-echo "Enabling Proxmox Services..."
+### Step 3: Add Proxmox VE Repository & GPG Key ###
+echo "Adding Proxmox VE repository..."
+echo "deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription" > /etc/apt/sources.list.d/pve-install-repo.list
+
+# Add the Proxmox GPG key
+echo "Adding Proxmox VE GPG Key..."
+wget -qO- https://enterprise.proxmox.com/debian/proxmox-release-bookworm.gpg | tee /etc/apt/trusted.gpg.d/proxmox-release-bookworm.gpg > /dev/null
+
+### Step 4: Install Proxmox VE ###
+echo "Installing Proxmox VE..."
+apt update && apt install -y proxmox-ve postfix open-iscsi
+
 systemctl restart pve-cluster
 systemctl enable pve-cluster
 
-### Step 4: Disable IPv6 ###
+### Step 5: Disable IPv6 ###
 echo "Disabling IPv6..."
-sysctl -w net.ipv6.conf.all.disable_ipv6=1
-sysctl -w net.ipv6.conf.default.disable_ipv6=1
 echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
 echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
+sysctl -p
 
-### Step 5: Open Necessary Ports ###
-echo "Configuring firewall rules..."
-ufw allow 8006/tcp  # Proxmox Web UI
-ufw allow 22/tcp    # SSH
-ufw enable
+### Completion ###
+echo "Proxmox VE installation completed successfully! 🚀"
 
-### Final Message ###
-echo -e "\n==============================="
-echo "Proxmox VE Installed Successfully!"
-echo "Access Proxmox UI: https://your-server-ip:8006"
-echo "==============================="
