@@ -20,7 +20,7 @@ This script automates the setup of a complete web hosting infrastructure on a **
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/sumit-kumawat/whm/blob/main/install.sh
-   cd conzex-setup
+   cd conzex-whm
    ```
 2. **Make the script executable:**
    ```bash
@@ -39,5 +39,5 @@ This script automates the setup of a complete web hosting infrastructure on a **
 - Monitoring via **Grafana**: `https://your-server-ip:3000`
 
 ## Support
-For any issues, contact **hello@conzex.com**.
+For any issues, contact **support@conzex.com**.
 
