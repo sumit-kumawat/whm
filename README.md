@@ -19,16 +19,16 @@ This script automates the setup of a complete web hosting infrastructure on a **
 ## Installation
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/sumit-kumawat/whm/blob/main/install.sh
+   git clone https://github.com/sumit-kumawat/whm.git
    cd conzex-whm
    ```
 2. **Make the script executable:**
    ```bash
-   chmod +x setup.sh
+   chmod +x install.sh
    ```
 3. **Run the script:**
    ```bash
-   ./setup.sh
+   ./install.sh
    ```
 
 ## Post-Installation
