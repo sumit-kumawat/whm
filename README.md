@@ -20,7 +20,7 @@ This script automates the setup of a complete web hosting infrastructure on a **
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/sumit-kumawat/whm.git
-   cd conzex-whm
+   cd whm
    ```
 2. **Make the script executable:**
    ```bash
