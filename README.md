@@ -1,43 +1,79 @@
-# Conzex Web Hosting Setup Script
+# Conzex Web Hosting Management (WHM)
 
 ## Overview
-This script automates the setup of a complete web hosting infrastructure on a **single Debian 12 server**. It installs and configures:
+This repository provides automated scripts to set up and configure a complete web hosting solution using **CyberPanel**, **Proxmox VE**, and **Security & Monitoring Tools**. These scripts are designed to automate the installation and configuration of essential hosting components on **Debian 12** and **Ubuntu 22.04**.
 
-- **CyberPanel** (Accessible via `cpanel.conzex.com`)
-- **Proxmox VE** for VPS hosting and automation
-- **FOSSBilling** with full branding and integration
-- **Automated backups** (45-day retention)
-- **Security enhancements** (CSF, Fail2Ban, SSL, Firewalls)
-- **Monitoring tools** (Zabbix, Prometheus, Grafana)
-- **WordPress** for a Hostinger-like client portal
+---
 
-## Prerequisites
-- A **Debian 12** server (Recommended: Dell PowerEdge R610)
-- A domain (`conzex.com`) and subdomain (`cpanel.conzex.com`)
-- Basic Linux knowledge for managing the server
+## 📌 Features
+- **CyberPanel + FOSSBilling**: Automates the installation of CyberPanel and FOSSBilling for web hosting and billing management.
+- **VPS Hosting (Proxmox VE)**: Sets up Proxmox VE for VPS hosting and automation.
+- **Security & Monitoring**: Configures CSF, Fail2Ban, Zabbix, Prometheus, and Grafana for enhanced security and system monitoring.
+- **Automatic Backups**: Configures a **45-day retention** policy using **BorgBackup**.
+- **Firewall and Security Enhancements**: Sets up **UFW, CSF, and Fail2Ban** for security hardening.
+- **IPv6 Disabling**: Ensures consistent networking by disabling **IPv6**.
 
-## Installation
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/sumit-kumawat/whm.git
-   cd whm
-   ```
-2. **Make the script executable:**
-   ```bash
-   chmod +x install.sh
-   ```
-3. **Run the script:**
-   ```bash
-   ./install.sh
-   ```
+---
 
-## Post-Installation
-- Access **CyberPanel**: `https://cpanel.conzex.com`
-- Login to **Proxmox VE**: `https://your-server-ip:8006`
-- Manage billing via **FOSSBilling**: `https://your-server-ip/fossbilling`
-- Client portal via **WordPress**: `https://your-server-ip`
-- Monitoring via **Grafana**: `https://your-server-ip:3000`
+## 🚀 Scripts Summary
+| Script Name | Purpose | Supported OS |
+|------------|---------|-------------|
+| **cyberpanel_fossbilling.sh** | Installs CyberPanel & FOSSBilling | Debian 12 / Ubuntu 22.04 |
+| **vps_proxmox.sh** | Installs and configures Proxmox VE for VPS hosting | Debian 12 |
+| **security_monitoring.sh** | Installs security tools (CSF, Fail2Ban) & monitoring tools (Zabbix, Prometheus, Grafana) | Debian 12 / Ubuntu 22.04 |
 
-## Support
-For any issues, contact **support@conzex.com**.
+---
 
+## 🛠 Installation Guide
+### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/sumit-kumawat/whm.git
+cd whm
+```
+
+### 2️⃣ Run the Desired Script
+**Make the script executable:**
+```bash
+chmod +x script-name.sh
+```
+
+**Execute the script as root:**
+```bash
+./script-name.sh
+```
+
+---
+
+## 📜 Script Details
+### 🔹 CyberPanel + FOSSBilling (`cyberpanel_fossbilling.sh`)
+- Installs **CyberPanel** (accessible at `https://cpanel.conzex.com`)
+- Deploys **FOSSBilling** for automated billing
+- Configures **automatic backups (45-day retention)**
+- Enables **UFW Firewall**
+
+### 🔹 VPS Hosting with Proxmox VE (`vps_proxmox.sh`)
+- Installs **Proxmox VE**
+- Enables **Proxmox Cluster Services**
+- Disables **IPv6 for better compatibility**
+- Opens firewall ports for **Proxmox Web UI**
+
+### 🔹 Security & Monitoring (`security_monitoring.sh`)
+- Installs **CSF Firewall & Fail2Ban** for security hardening
+- Deploys **Zabbix, Prometheus, and Grafana** for monitoring
+- Configures firewall rules for monitoring services
+
+---
+
+## 🎯 Contributing
+Contributions are welcome! Feel free to submit **pull requests** for improvements or bug fixes.
+
+---
+
+## 📞 Support
+For any queries, contact:
+- 📧 Email: **support@conzex.com**
+
+---
+
+## 🏆 Credits
+Maintained by **Conzex Global Private Limited** ([www.conzex.com](https://www.conzex.com))
