@@ -1,38 +1,44 @@
 #!/bin/bash
-# Proxmox VE Installation Script for Debian 12
-# This script installs Proxmox VE and configures necessary dependencies
 
-set -e  # Exit on error
-
-### Step 1: Update System ###
-echo "Updating system packages..."
-apt update && apt upgrade -y
-
-### Step 2: Install Required Dependencies ###
-echo "Installing required dependencies..."
-apt install -y curl wget git sudo software-properties-common
-
-### Step 3: Add Proxmox VE Repository & GPG Key ###
-echo "Adding Proxmox VE repository..."
-echo "deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription" > /etc/apt/sources.list.d/pve-install-repo.list
-
-# Add the Proxmox GPG key
-echo "Adding Proxmox VE GPG Key..."
-wget -qO- https://enterprise.proxmox.com/debian/proxmox-release-bookworm.gpg | tee /etc/apt/trusted.gpg.d/proxmox-release-bookworm.gpg > /dev/null
-
-### Step 4: Install Proxmox VE ###
-echo "Installing Proxmox VE..."
-apt update && apt install -y proxmox-ve postfix open-iscsi
-
-systemctl restart pve-cluster
-systemctl enable pve-cluster
-
-### Step 5: Disable IPv6 ###
+# Disable IPv6 before starting anything
 echo "Disabling IPv6..."
 echo "net.ipv6.conf.all.disable_ipv6 = 1" >> /etc/sysctl.conf
 echo "net.ipv6.conf.default.disable_ipv6 = 1" >> /etc/sysctl.conf
+echo "net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
 sysctl -p
 
-### Completion ###
-echo "Proxmox VE installation completed successfully! 🚀"
+# Define variables
+PVE_REPO="deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription"
+HOSTNAME="proxmox"  # Change this to your desired hostname
 
+# Update system
+apt update && apt full-upgrade -y
+
+# Install required dependencies
+apt install -y curl wget gnupg2 lsb-release software-properties-common
+
+# Add Proxmox VE repository and key
+wget -qO /etc/apt/trusted.gpg.d/proxmox-release-bookworm.gpg https://enterprise.proxmox.com/debian/proxmox-release-bookworm.gpg
+echo "$PVE_REPO" > /etc/apt/sources.list.d/pve.list
+
+# Disable enterprise repository (optional for non-subscription users)
+sed -i 's/^deb/#deb/g' /etc/apt/sources.list.d/pve-enterprise.list
+
+# Update package list and install Proxmox VE
+apt update && apt install -y proxmox-ve postfix open-iscsi
+
+# Set hostname
+hostnamectl set-hostname "$HOSTNAME"
+
+# Disable conflicting services
+apt remove -y os-prober
+systemctl disable --now apparmor
+
+# Configure GRUB for better performance
+sed -i 's/quiet/quiet intel_iommu=on iommu=pt/g' /etc/default/grub
+update-grub
+
+# Reboot to apply changes
+echo "Proxmox installation complete. Rebooting in 10 seconds..."
+sleep 10
+reboot
